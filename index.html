@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #5A5C64;
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      margin: 7px;
+    }
+
+    .header {
+      width: 100%;
+      height: 32px;
+      background-color: #27282E;
+      color: #7B7D84;
+      font-family: 'Droid Sans';
+      font-weight: 600;
+      margin-bottom: 1px;
+      padding: 5px;
+      box-sizing: border-box;
+
+      font-size: 14px;
+      cursor: default;
+      font-family: "Droid Sans";
+      color: rgb(181, 184, 193);
+    }
+
+    .content {
+      /* width: 100%; */
+      height: 100%;
+      width: 100%;
+      background-color: #27282E;
+      padding: 5px;
+    }
+
+    .content>div {
+      width: 100%;
+      height: 100%;
+      background-color: #393C43;
+      border-radius: 5px;
+    }
+
+    .canvas-area {
+      width: 1252px;
+      height: 145px;
+    }
+
+    canvas {
+      /* margin-top: 400px; */
+    }
+  </style>
+  <title>Canvas Prac</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      Activity 모니터
+    </div>
+    <div class="content">
+      <div>
+        <div class="canvas-area">
+          <canvas id="canvas" width="800">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript" src="./canvas.js"></script>
+
+</html>
