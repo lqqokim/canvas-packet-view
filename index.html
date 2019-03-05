@@ -4,60 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <style>
-
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      background-color: #5A5C64;
-      word-wrap: break-word;
-    }
-
-    p {
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      margin: 7px;
-      height: calc(100% - 55px);
-    }
-
-    .header {
-      height: 32px;
-      background-color: #27282E;
-      color: #7B7D84;
-      font-family: 'Droid Sans';
-      font-weight: 600;
-      margin-bottom: 1px;
-
-
-      font-size: 14px;
-      cursor: default;
-      font-family: "Droid Sans";
-      color: rgb(181, 184, 193);
-
-      box-sizing: border-box;
-      padding: 5px;
-    }
-
-    .content {
-      height: 100%;
-      background-color: #27282E;
-      padding: 5px;
-    }
-
-    .canvas-area {
-      height: 100%;
-      background-color: #393C43;
-      border-radius: 5px;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="style.css">
   <title>Canvas Prac</title>
 </head>
 
@@ -69,13 +16,15 @@
     </div>
     <div class="content">
       <div class="canvas-area">
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas_first"></canvas>
+        <canvas id="canvas_second"></canvas>
       </div>
       </di>
     </div>
   </div>
 </body>
 
-<script type="module" src="./app.js"></script>
+<script src="./app.js"></script>
+<!-- <script src="./draw.js"></script> -->
 
 </html>
