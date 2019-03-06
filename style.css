@@ -49,10 +49,10 @@ p {
   border-radius: 5px;
 }
 
-#canvas_first {
+#canvasBullet {
   position: absolute;
 }
 
-#canvas_second {
+#canvasLayout {
   position: absolute;
 }

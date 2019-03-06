@@ -2,130 +2,137 @@ window.addEventListener('DOMContentLoaded', function () {
   initCanvas();
 });
 
-//global variables
-let canvas_first, canvas_second, ctx_first, ctx_second, canvasArea, handle;
-let WIDTH, HEIGHT;
+let canvasBullet; // 패킷 날아가는 것 관련 canvas
+let canvasLayout; // 라인과 텍스트관련 레이아웃 canvas
+let ctxBullet, ctxLayout; // canvas context
+let parentEl;
+let start, progress; // requestAnimationFrame animation에서 사용
+const image = new Image(); // 패킷 image 객체
 
-let nextTime = 0;
-let duration = 1000;
-
-const image = new Image();
+let parentWidth, parentHeight;
+const IMAGE_PATH = { // 색상별 패킷 이미지 경로
+  BLUE: "./images/SpeedSQ_Blue.png",
+  RED: "./images/SpeedSQ_Red.png",
+  YELLOW: "./images/SpeedSQ_Yellow.png"
+};
 
 function initCanvas() {
-  canvas_first = document.getElementById('canvas_first');
-  canvas_second = document.getElementById('canvas_second');
-  canvasParentEl = document.getElementsByClassName('canvas-area');
+  canvasBullet = document.getElementById('canvasBullet');
+  canvasLayout = document.getElementById('canvasLayout');
 
-  if (canvas_first.getContext && canvas_second.getContext) {
-    ctx_first = canvas_first.getContext('2d');
-    ctx_second = canvas_second.getContext('2d');
+  parentEl = canvasBullet.parentNode;
+  parentWidth = parentEl.offsetWidth;
+  parentHeight = parentEl.offsetHeight;
 
-    image.src = "./images/SpeedSQ_Blue.png";
-    setCanvasSize();
+  if (canvasBullet.getContext && canvasLayout.getContext) {
+    ctxBullet = canvasBullet.getContext('2d');
+    ctxLayout = canvasLayout.getContext('2d');
+
+    image.src = IMAGE_PATH.BLUE;
+    initCanvasBullet();
+    initCanvasLayout();
     bindResizeEvent();
-
   };
 }
 
-function getElement() {
-
+// bullet canvas 사이즈 설정
+function initCanvasBullet() {
+  ctxBullet.canvas.width = parentEl.offsetWidth;
+  ctxBullet.canvas.height = parentEl.offsetHeight;
+  drawBullet();
 }
 
-let start, progress;
+// layout canvas 사이즈 설정
+function initCanvasLayout() {
+  ctxLayout.canvas.width = parentEl.offsetWidth;
+  ctxLayout.canvas.height = parentEl.offsetHeight;
+  drawLinesAndText();
+}
 
-function step(timestamp) {
-  if (!start || progress > 3000) {
+// start animation
+function drawBullet(timestamp) {
+  if (!start || progress > 5000) {
     start = timestamp;
   }
   progress = (timestamp - start) / 10 * 50;
 
   moveBullet(progress);
-  handle = window.requestAnimationFrame(step);
+  window.requestAnimationFrame(drawBullet);
 }
 
 function moveBullet(progress) {
-  ctx_first.clearRect(0, 0, ctx_first.canvas.width, ctx_first.canvas.height);
-  ctx_first.drawImage(image, progress, 390);
+  ctxBullet.clearRect(0, 0, ctxBullet.canvas.width, ctxBullet.canvas.height);
+  ctxBullet.drawImage(image, progress, 390);
 }
+// end animation
 
-function setCanvasSize() {
-  const parentEl = canvas_first.parentNode;
-
-  HEIGHT = parentEl.offsetWidth;
-  WIDTH = parentEl.offsetHeight;
-
-  ctx_first.canvas.width = parentEl.offsetWidth;
-  ctx_first.canvas.height = parentEl.offsetHeight;
-
-  ctx_second.canvas.width = parentEl.offsetWidth;
-  ctx_second.canvas.height = parentEl.offsetHeight;
-
-  drawLines();
-  step();
-}
-
+//브라우저 리사이즈 되면 각각의 캔버스 사이즈 다시 잡아준다
 function bindResizeEvent() {
   let timer;
 
   window.addEventListener('resize', () => {
     timer && clearTimeout(timer);
-    timer = setTimeout(this.setCanvasSize, 500);
+    timer = setTimeout(this.changeCanvasSize, 500);
   });
 }
 
-function drawLines() {
-  ctx_second.beginPath();
-  ctx_second.moveTo(50, 400);
-  ctx_second.lineTo(500, 400);
-  ctx_second.strokeStyle = "rgb(255, 255, 255, 0.1)";
-  ctx_second.lineWidth = 2;
-  ctx_second.stroke();
+function changeCanvasSize() {
+  initCanvasBullet();
+  initCanvasLayout();
+}
 
-  ctx_second.beginPath();
-  ctx_second.moveTo(500, 350);
-  ctx_second.lineTo(500, 450)
-  ctx_second.strokeStyle = "rgb(255, 255, 255, 0.5)";
-  ctx_second.lineWidth = 3;
-  ctx_second.stroke();
+function drawLinesAndText() {
+  // 들어가는 경로
+  ctxLayout.beginPath();
+  ctxLayout.moveTo(50, 400);
+  ctxLayout.lineTo(500, 400);
+  ctxLayout.strokeStyle = "rgb(255, 255, 255, 0.1)";
+  ctxLayout.lineWidth = 2;
+  ctxLayout.stroke();
 
-  ctx_second.beginPath();
-  ctx_second.moveTo(800, 350);
-  ctx_second.lineTo(800, 450)
-  ctx_second.strokeStyle = "rgb(255, 255, 255, 0.5)";
-  ctx_second.lineWidth = 3;
-  ctx_second.stroke();
+  //중간 영역 시작
+  ctxLayout.beginPath();
+  ctxLayout.moveTo(500, 350);
+  ctxLayout.lineTo(500, 450)
+  ctxLayout.strokeStyle = "rgb(255, 255, 255, 0.5)";
+  ctxLayout.lineWidth = 3;
+  ctxLayout.stroke();
 
-  ctx_second.beginPath();
-  ctx_second.moveTo(800, 400);
-  ctx_second.lineTo(1250, 400);
-  ctx_second.strokeStyle = "rgb(255, 255, 255, 0.1)";
-  ctx_second.lineWidth = 2;
-  ctx_second.stroke();
+  ctxLayout.beginPath();
+  ctxLayout.moveTo(800, 350);
+  ctxLayout.lineTo(800, 450)
+  ctxLayout.strokeStyle = "rgb(255, 255, 255, 0.5)";
+  ctxLayout.lineWidth = 3;
+  ctxLayout.stroke();
+  // 중간 영역 끝
 
+  // 나가는 경로
+  ctxLayout.beginPath();
+  ctxLayout.moveTo(800, 400);
+  ctxLayout.lineTo(1250, 400);
+  ctxLayout.strokeStyle = "rgb(255, 255, 255, 0.1)";
+  ctxLayout.lineWidth = 2;
+  ctxLayout.stroke();
 
-  ctx_second.fillStyle = "rgb(182, 183, 187)"
-
-  ctx_second.font = '20px MS';
-  ctx_second.fillText('54', 20, 300);
-
-  ctx_second.font = '22px MS';
-  ctx_second.fillStyle = "rgb(182, 183, 187)"
-  ctx_second.fillText('현재 전체 건수', 50, 300);
-  ctx_second.fillText('요청/초', 70, 350);
-  ctx_second.fillText('정상', 500, 300);
-  ctx_second.fillText('경고', 650, 300);
-  ctx_second.fillText('심각', 800, 300);
-  ctx_second.fillText('응답/초', 1200, 350);
-
-  // ctx_second.font = '16px MS';
-  ctx_second.fillText('3', 50, 350);
-  ctx_second.fillText('3', 1280, 350);
-
-  ctx_second.font = '20px MS';
-  ctx_second.fillStyle = "blue";
-  ctx_second.fillText('10', 480, 300);
-  ctx_second.fillStyle = "yellow";
-  ctx_second.fillText('15', 630, 300);
-  ctx_second.fillStyle = "red";
-  ctx_second.fillText('16', 780, 300);
+  // 텍스트들
+  ctxLayout.fillStyle = "rgb(182, 183, 187)"
+  ctxLayout.font = '20px MS';
+  ctxLayout.fillText('54', 20, 300);
+  ctxLayout.font = '22px MS';
+  ctxLayout.fillStyle = "rgb(182, 183, 187)"
+  ctxLayout.fillText('현재 전체 건수', 50, 300);
+  ctxLayout.fillText('요청/초', 70, 350);
+  ctxLayout.fillText('정상', 500, 300);
+  ctxLayout.fillText('경고', 650, 300);
+  ctxLayout.fillText('심각', 800, 300);
+  ctxLayout.fillText('응답/초', 1200, 350);
+  ctxLayout.fillText('3', 50, 350);
+  ctxLayout.fillText('3', 1280, 350);
+  ctxLayout.font = '20px MS';
+  ctxLayout.fillStyle = "blue";
+  ctxLayout.fillText('10', 480, 300);
+  ctxLayout.fillStyle = "yellow";
+  ctxLayout.fillText('15', 630, 300);
+  ctxLayout.fillStyle = "red";
+  ctxLayout.fillText('16', 780, 300);
 }
